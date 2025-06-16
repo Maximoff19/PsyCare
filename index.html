@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PsyCare - Panel de Psicólogo</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Menú Lateral -->
+        <nav class="sidebar">
+            <div class="logo">
+                <div class="logo-image">
+                    <img src="PsyCareLog.jpg" alt="PsyCare Logo">
+                </div>
+                <div class="logo-text">
+                    <h1>PsyCare</h1>
+                    <p>Panel de Psicólogo</p>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li class="active"><a href="index.html"><i class="fas fa-home"></i> Inicio</a></li>
+                <li><a href="pacientes.html"><i class="fas fa-users"></i> Pacientes</a></li>
+                <li><a href="citas.html"><i class="fas fa-calendar"></i> Citas</a></li>
+                <li><a href="evaluaciones.html"><i class="fas fa-clipboard-list"></i> Evaluaciones</a></li>
+                <li><a href="ajustes.html"><i class="fas fa-cog"></i> Ajustes</a></li>
+                <li><a href="#" id="logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Buscar...">
+                </div>
+                <div class="user-profile">
+                    <span>Dr. Juan Pérez</span>
+                    <img src="https://via.placeholder.com/40" alt="Perfil">
+                </div>
+            </header>
+
+            <div class="dashboard">
+                <div class="panel">
+                    <h2>Resumen General</h2>
+                    <div class="cards-container">
+                        <div class="card">
+                            <i class="fas fa-users"></i>
+                            <h3>Pacientes</h3>
+                            <p>12 pacientes activos</p>
+                        </div>
+                        <div class="card">
+                            <i class="fas fa-calendar-check"></i>
+                            <h3>Citas Hoy</h3>
+                            <p>5 citas programadas</p>
+                        </div>
+                        <div class="card">
+                            <i class="fas fa-clipboard-list"></i>
+                            <h3>Evaluaciones</h3>
+                            <p>3 pendientes</p>
+                        </div>
+                        <div class="card">
+                            <i class="fas fa-chart-line"></i>
+                            <h3>Progreso</h3>
+                            <p>85% de objetivos cumplidos</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h2>Próximas Citas</h2>
+                    <div class="appointments-list">
+                        <div class="appointment-item">
+                            <div class="appointment-info">
+                                <i class="fas fa-calendar-check"></i>
+                                <div>
+                                    <h3>María González</h3>
+                                    <p>10:00 AM - Terapia Individual</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="appointment-item">
+                            <div class="appointment-info">
+                                <i class="fas fa-calendar-check"></i>
+                                <div>
+                                    <h3>Carlos Rodríguez</h3>
+                                    <p>11:30 AM - Evaluación</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </button>
+    <script src="script.js"></script>
+</body>
+</html>

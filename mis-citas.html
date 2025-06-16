@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PsyCare - Mis Citas</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Menú Lateral -->
+        <nav class="sidebar">
+            <div class="logo">
+                <div class="logo-image">
+                    <img src="PsyCareLog.jpg" alt="PsyCare Logo">
+                </div>
+                <div class="logo-text">
+                    <h1>PsyCare</h1>
+                    <p>Panel de Paciente</p>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="paciente.html"><i class="fas fa-home"></i> Inicio</a></li>
+                <li class="active"><a href="mis-citas.html"><i class="fas fa-calendar"></i> Mis Citas</a></li>
+                <li><a href="mis-evaluaciones.html"><i class="fas fa-clipboard-list"></i> Mis Evaluaciones</a></li>
+                <li><a href="mi-progreso.html"><i class="fas fa-chart-line"></i> Mi Progreso</a></li>
+                <li><a href="recursos.html"><i class="fas fa-book"></i> Recursos</a></li>
+                <li><a href="ajustes-paciente.html"><i class="fas fa-cog"></i> Ajustes</a></li>
+                <li><a href="#" id="logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Buscar cita...">
+                </div>
+                <div class="user-profile">
+                    <span>María González</span>
+                    <img src="https://via.placeholder.com/40" alt="Perfil">
+                </div>
+            </header>
+
+            <div class="appointments-container">
+                <div class="section-header">
+                    <h2>Mis Citas</h2>
+                    <button class="btn-primary" id="addPatientAppointmentBtn"><i class="fas fa-calendar-plus"></i> Agendar Nueva Cita</button>
+                </div>
+
+                <div class="appointments-list" id="patientAppointmentsList">
+                     <!-- Appointments will be loaded here by script -->
+                     <p class="no-appointments">Cargando citas...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+    <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </button>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPatientAppointments();
+
+            const addAppointmentBtn = document.getElementById('addPatientAppointmentBtn');
+             if(addAppointmentBtn) { // Check if button exists
+                 addAppointmentBtn.addEventListener('click', () => {
+                     window.location.href = 'agregar-cita.html?role=patient'; // Redirect to a generic add appointment page, maybe specify role or patient ID
+                 });
+             }
+        });
+
+        function loadPatientAppointments() {
+             // In a real app, you would fetch appointments for the logged-in patient
+             // Here, we simulate fetching from localStorage
+            const allAppointments = JSON.parse(localStorage.getItem('calendarEvents') || '[]');
+            const patientAppointmentsList = document.getElementById('patientAppointmentsList');
+            
+             // Filter appointments for a hypothetical patient (e.g., by patient ID stored in session/local storage)
+             // For demonstration, let's assume we filter by patient name 'María González' mentioned in paciente.html
+             const currentPatientName = "María González"; // This should come from authentication state
+
+            const patientAppointments = allAppointments.filter(appt => {
+                // Assuming appointment title contains patient name for this demo
+                // In a real app, use patientId linked to the appointment
+                 const patient = JSON.parse(localStorage.getItem('patients') || '[]').find(p => p.id === appt.extendedProps.patientId);
+                 return patient && patient.name === currentPatientName;
+            });
+
+            if (patientAppointmentsList) {
+                if (patientAppointments.length > 0) {
+                    patientAppointmentsList.innerHTML = patientAppointments.map(appt => `
+                        <div class="appointment-card">
+                            <div class="time">${new Date(appt.start).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}</div>
+                            <div class="appointment-info">
+                                <h4>${appt.title}</h4>
+                                <p>Fecha: ${new Date(appt.start).toLocaleDateString('es-ES')}</p>
+                                <p>Tipo: ${appt.extendedProps.type || 'No especificado'}</p>
+                            </div>
+                             <!-- Patient view might not need edit/delete actions here, or simplified ones -->
+                             <!--
+                             <div class="appointment-actions">
+                                 <button class="btn-secondary view-appointment-btn" data-id="${appt.id}">Ver Detalles</button>
+                             </div>
+                              -->
+                        </div>
+                    `).join('');
+
+                    // Add event listeners for view button if implemented
+                     patientAppointmentsList.querySelectorAll('.view-appointment-btn').forEach(button => {
+                         button.addEventListener('click', (e) => {
+                             const appointmentId = e.target.dataset.id;
+                             console.log(`Ver detalles de cita con ID: ${appointmentId}`);
+                             // Implement logic to show appointment details
+                         });
+                     });
+
+                } else {
+                    patientAppointmentsList.innerHTML = '<p class="no-appointments">No tienes citas programadas.</p>';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

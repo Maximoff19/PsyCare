@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citas - PsyCare</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Menú Lateral -->
+        <nav class="sidebar">
+            <div class="logo">
+                <div class="logo-image">
+                    <img src="PsyCareLog.jpg" alt="PsyCare Logo">
+                </div>
+                <div class="logo-text">
+                    <h1>PsyCare</h1>
+                    <p>Panel de Psicólogo</p>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html"><i class="fas fa-home"></i> Inicio</a></li>
+                <li><a href="pacientes.html"><i class="fas fa-users"></i> Pacientes</a></li>
+                <li class="active"><a href="citas.html"><i class="fas fa-calendar"></i> Citas</a></li>
+                <li><a href="evaluaciones.html"><i class="fas fa-clipboard-list"></i> Evaluaciones</a></li>
+                <li><a href="ajustes-psicologo.html"><i class="fas fa-cog"></i> Ajustes</a></li>
+                <li><a href="#" id="logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Buscar citas...">
+                </div>
+                <div class="user-profile">
+                    <span>Dr. Juan Pérez</span>
+                    <img src="https://via.placeholder.com/40" alt="Perfil">
+                </div>
+            </header>
+
+            <div class="dashboard">
+                <div class="panel">
+                    <div class="section-header">
+                        <h2>Citas del Día</h2>
+                        <a href="agregar-cita.html" class="btn-primary">
+                            <i class="fas fa-plus"></i> Agregar Cita
+                        </a>
+                    </div>
+                    <div class="appointments-list" id="appointmentsList">
+                        <!-- Citas de ejemplo -->
+                        <div class="appointment-item">
+                            <div class="appointment-info">
+                                <i class="fas fa-calendar-check"></i>
+                                <div>
+                                    <h3>Cita con Paciente Ejemplo 1</h3>
+                                    <p>Fecha: 2023-10-28 - Hora: 10:00 AM</p>
+                                    <p>Tipo: Terapia - Modalidad: Virtual</p>
+                                </div>
+                            </div>
+                            <div class="appointment-actions">
+                                <button class="btn-secondary">Ver Detalles</button>
+                                <button class="btn-secondary">Editar</button>
+                                <button class="btn-danger">Cancelar</button>
+                            </div>
+                        </div>
+                        <div class="appointment-item">
+                             <div class="appointment-info">
+                                <i class="fas fa-calendar-check"></i>
+                                <div>
+                                    <h3>Cita con Paciente Ejemplo 2</h3>
+                                    <p>Fecha: 2023-10-28 - Hora: 11:30 AM</p>
+                                    <p>Tipo: Evaluación - Modalidad: Presencial</p>
+                                </div>
+                            </div>
+                            <div class="appointment-actions">
+                                <button class="btn-secondary">Ver Detalles</button>
+                                <button class="btn-secondary">Editar</button>
+                                <button class="btn-danger">Cancelar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal para editar cita -->
+    <div class="modal" id="editAppointmentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Editar Cita</h3>
+                <button class="btn-icon close-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="editAppointmentForm">
+                <div class="form-group">
+                    <label>Paciente</label>
+                    <select id="editPatient" required>
+                        <!-- Los pacientes se cargarán dinámicamente -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Fecha</label>
+                    <input type="date" id="editDate" required>
+                </div>
+                <div class="form-group">
+                    <label>Hora</label>
+                    <input type="time" id="editTime" required>
+                </div>
+                <div class="form-group">
+                    <label>Tipo de sesión</label>
+                    <select id="editSessionType" required>
+                        <option value="terapia">Terapia</option>
+                        <option value="evaluacion">Evaluación</option>
+                        <option value="seguimiento">Seguimiento</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Modalidad</label>
+                    <select id="editModality" required>
+                        <option value="presencial">Presencial</option>
+                        <option value="virtual">Virtual</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Estado</label>
+                    <select id="editStatus" required>
+                        <option value="pending">Pendiente</option>
+                        <option value="confirmed">Confirmada</option>
+                        <option value="cancelled">Cancelada</option>
+                        <option value="completed">Completada</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Notas</label>
+                    <textarea id="editNotes" rows="4"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-danger" id="deleteAppointment">Eliminar Cita</button>
+                    <button type="submit" class="btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </button>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const calendarEl = document.getElementById('calendar');
+            const modal = document.getElementById('appointmentModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const appointmentForm = document.getElementById('appointmentForm');
+            const deleteAppointmentBtn = document.getElementById('deleteAppointmentBtn');
+            const closeButton = modal.querySelector('.close-button');
+            const selectedDayAppointmentsDiv = document.getElementById('selectedDayAppointments');
+            const addAppointmentBtn = document.getElementById('addAppointmentBtn');
+            const appointmentPatientSelect = document.getElementById('appointmentPatient');
+
+            let currentEvents = JSON.parse(localStorage.getItem('calendarEvents')) || [];
+
+            // Load patients for the select dropdown
+             function loadPatientsForSelect() {
+                const patients = JSON.parse(localStorage.getItem('patients') || '[]');
+                appointmentPatientSelect.innerHTML = '<option value="">Seleccione un paciente</option>'; // Reset options
+                patients.forEach(patient => {
+                    const option = document.createElement('option');
+                    option.value = patient.id;
+                    option.textContent = patient.name;
+                    appointmentPatientSelect.appendChild(option);
+                });
+            }
+
+             loadPatientsForSelect();
+
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'es',
+                events: currentEvents,
+                dateClick: function(info) {
+                    // Handle day click to show appointments
+                    displayAppointmentsForDay(info.dateStr);
+                },
+                eventClick: function(info) {
+                    // Handle event click to edit appointment
+                    editAppointment(info.event);
+                },
+                 dayCellContent: function(arg) {
+                    // Add data attribute for day number to style in CSS
+                    return { html: `<div class="day-number">${arg.dayNumber}</div>` };
+                },
+                 eventDidMount: function(info) {
+                    // Add custom class based on event type if needed
+                    // info.el.classList.add(info.event.extendedProps.type.toLowerCase().replace(' ', '-'));
+                }
+            });
+
+            calendar.render();
+
+             // Display appointments for a selected day
+            function displayAppointmentsForDay(dateStr) {
+                 const appointments = currentEvents.filter(event => event.start.startsWith(dateStr));
+                 if (selectedDayAppointmentsDiv) {
+                     if (appointments.length > 0) {
+                         selectedDayAppointmentsDiv.innerHTML = appointments.map(appt => `
+                            <div class="appointment-card">
+                                <div class="time">${new Date(appt.start).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}</div>
+                                <div class="appointment-info">
+                                    <h4>${appt.title}</h4>
+                                    <p>Tipo: ${appt.extendedProps.type || 'No especificado'}</p>
+                                </div>
+                                <div class="appointment-actions">
+                                    <button class="btn-secondary edit-appointment-btn" data-id="${appt.id}">Ver/Editar</button>
+                                </div>
+                            </div>
+                         `).join('');
+
+                         selectedDayAppointmentsDiv.querySelectorAll('.edit-appointment-btn').forEach(button => {
+                             button.addEventListener('click', (e) => {
+                                 const appointmentId = e.target.dataset.id;
+                                 const eventToEdit = calendar.getEventById(appointmentId);
+                                 if (eventToEdit) {
+                                     editAppointment(eventToEdit);
+                                 }
+                             });
+                         });
+
+                     } else {
+                         selectedDayAppointmentsDiv.innerHTML = '<p class="no-appointments">No hay citas para este día.</p>';
+                     }
+                 }
+             }
+
+            // Show modal for adding new appointment
+            addAppointmentBtn.addEventListener('click', () => {
+                modalTitle.textContent = 'Agregar Nueva Cita';
+                appointmentForm.reset();
+                 document.getElementById('appointmentId').value = '';
+                 deleteAppointmentBtn.style.display = 'none';
+                 loadPatientsForSelect(); // Ensure patient list is updated
+                modal.style.display = 'flex';
+            });
+
+            // Show modal for editing existing appointment
+            function editAppointment(event) {
+                modalTitle.textContent = 'Editar Cita';
+                 document.getElementById('appointmentId').value = event.id;
+                document.getElementById('appointmentTitle').value = event.title;
+                document.getElementById('appointmentDate').value = event.startStr.substring(0, 10); // Extract date part
+                document.getElementById('appointmentTime').value = event.startStr.substring(11, 16); // Extract time part
+
+                 // Select patient and type
+                 if (event.extendedProps.patientId) {
+                     document.getElementById('appointmentPatient').value = event.extendedProps.patientId;
+                 }
+                 if (event.extendedProps.type) {
+                     document.getElementById('appointmentType').value = event.extendedProps.type;
+                 }
+                  if (event.extendedProps.notes) {
+                      document.getElementById('appointmentNotes').value = event.extendedProps.notes;
+                  }
+
+                deleteAppointmentBtn.style.display = 'inline-block';
+                modal.style.display = 'flex';
+            }
+
+            // Close modal
+            closeButton.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+
+            window.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+            // Save appointment
+            appointmentForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+
+                const id = document.getElementById('appointmentId').value || Date.now().toString(); // Generate ID if new
+                const title = document.getElementById('appointmentTitle').value;
+                const date = document.getElementById('appointmentDate').value;
+                const time = document.getElementById('appointmentTime').value;
+                const patientId = document.getElementById('appointmentPatient').value;
+                const type = document.getElementById('appointmentType').value;
+                 const notes = document.getElementById('appointmentNotes').value;
+
+                const newEvent = {
+                    id: id,
+                    title: title,
+                    start: `${date}T${time}`,
+                     extendedProps: {
+                         patientId: patientId,
+                         type: type,
+                         notes: notes
+                     }
+                };
+
+                if (document.getElementById('appointmentId').value) {
+                    // Update existing event
+                    const existingEvent = calendar.getEventById(id);
+                    if (existingEvent) {
+                        existingEvent.setProp('title', newEvent.title);
+                        existingEvent.setStart(newEvent.start);
+                         existingEvent.setExtendedProp('patientId', newEvent.extendedProps.patientId);
+                         existingEvent.setExtendedProp('type', newEvent.extendedProps.type);
+                         existingEvent.setExtendedProp('notes', newEvent.extendedProps.notes);
+                    }
+                } else {
+                    // Add new event
+                    calendar.addEvent(newEvent);
+                }
+
+                currentEvents = calendar.getEvents().map(event => ({
+                     id: event.id,
+                     title: event.title,
+                     start: event.startStr,
+                     extendedProps: event.extendedProps
+                 }));
+                localStorage.setItem('calendarEvents', JSON.stringify(currentEvents));
+                modal.style.display = 'none';
+                 // Refresh the displayed appointments if the current day is visible
+                 const displayedDate = selectedDayAppointmentsDiv.dataset.date;
+                 if (displayedDate && displayedDate === date) {
+                     displayAppointmentsForDay(date);
+                 }
+
+            });
+
+            // Delete appointment
+            deleteAppointmentBtn.addEventListener('click', () => {
+                const appointmentId = document.getElementById('appointmentId').value;
+                const eventToRemove = calendar.getEventById(appointmentId);
+                if (eventToRemove) {
+                    eventToRemove.remove();
+                    currentEvents = calendar.getEvents().map(event => ({
+                         id: event.id,
+                         title: event.title,
+                         start: event.startStr,
+                         extendedProps: event.extendedProps
+                     }));
+                    localStorage.setItem('calendarEvents', JSON.stringify(currentEvents));
+                    modal.style.display = 'none';
+                     // Refresh the displayed appointments if the current day is visible
+                     const displayedDate = selectedDayAppointmentsDiv.dataset.date;
+                     if (displayedDate && displayedDate === eventToRemove.startStr.substring(0, 10)) {
+                         displayAppointmentsForDay(displayedDate);
+                     }
+                }
+            });
+
+             // Initial display of appointments for today
+             const today = new Date().toISOString().split('T')[0];
+             displayAppointmentsForDay(today);
+
+        });
+    </script>
+</body>
+</html>

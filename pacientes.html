@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pacientes - PsyCare</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Menú Lateral -->
+        <nav class="sidebar">
+            <div class="logo">
+                <div class="logo-image">
+                    <img src="PsyCareLog.jpg" alt="PsyCare Logo">
+                </div>
+                <div class="logo-text">
+                    <h1>PsyCare</h1>
+                    <p>Panel de Psicólogo</p>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html"><i class="fas fa-home"></i> Inicio</a></li>
+                <li class="active"><a href="pacientes.html"><i class="fas fa-users"></i> Pacientes</a></li>
+                <li><a href="citas.html"><i class="fas fa-calendar"></i> Citas</a></li>
+                <li><a href="evaluaciones.html"><i class="fas fa-clipboard-list"></i> Evaluaciones</a></li>
+                <li><a href="ajustes-psicologo.html"><i class="fas fa-cog"></i> Ajustes</a></li>
+                <li><a href="#" id="logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Buscar pacientes...">
+                </div>
+                <div class="user-profile">
+                    <span>Dr. Juan Pérez</span>
+                    <img src="https://via.placeholder.com/40" alt="Perfil">
+                </div>
+            </header>
+
+            <div class="dashboard">
+                <div class="panel">
+                    <div class="section-header">
+                        <h2>Mis Pacientes</h2>
+                        <button class="btn-primary" id="addPatientBtn">
+                            <i class="fas fa-user-plus"></i> Agregar Nuevo Paciente
+                        </button>
+                    </div>
+                    <div class="patients-grid" id="patientsGrid">
+                        <!-- Tarjetas de pacientes de ejemplo -->
+                        <div class="patient-card">
+                            <div class="patient-info">
+                                <div class="patient-header">
+                                    <h3>Paciente Ejemplo 1</h3>
+                                    <span class="status active">Activo</span>
+                                </div>
+                                <div class="patient-details">
+                                    <p><i class="fas fa-envelope"></i> paciente1@example.com</p>
+                                    <p><i class="fas fa-phone"></i> 555-1234</p>
+                                    <p><i class="fas fa-calendar"></i> Última Actividad: 2023-10-27</p>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="patient-card">
+                            <div class="patient-info">
+                                <div class="patient-header">
+                                    <h3>Paciente Ejemplo 2</h3>
+                                    <span class="status active">Activo</span>
+                                </div>
+                                <div class="patient-details">
+                                    <p><i class="fas fa-envelope"></i> paciente2@example.com</p>
+                                    <p><i class="fas fa-phone"></i> 555-5678</p>
+                                    <p><i class="fas fa-calendar"></i> Última Actividad: 2023-10-20</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="patient-card">
+                            <div class="patient-info">
+                                <div class="patient-header">
+                                    <h3>Paciente Ejemplo 3</h3>
+                                    <span class="status active">Activo</span>
+                                </div>
+                                <div class="patient-details">
+                                    <p><i class="fas fa-envelope"></i> paciente3@example.com</p>
+                                    <p><i class="fas fa-phone"></i> 555-9012</p>
+                                    <p><i class="fas fa-calendar"></i> Última Actividad: 2023-10-25</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="patient-card">
+                            <div class="patient-info">
+                                <div class="patient-header">
+                                    <h3>Paciente Ejemplo 4</h3>
+                                    <span class="status active">Activo</span>
+                                </div>
+                                <div class="patient-details">
+                                    <p><i class="fas fa-envelope"></i> paciente4@example.com</p>
+                                    <p><i class="fas fa-phone"></i> 555-3456</p>
+                                    <p><i class="fas fa-calendar"></i> Última Actividad: 2023-10-18</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </button>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPatients();
+
+            const addPatientBtn = document.getElementById('addPatientBtn');
+            if (addPatientBtn) {
+                addPatientBtn.addEventListener('click', () => {
+                    window.location.href = 'agregar-paciente.html';
+                });
+            }
+        });
+
+        function loadPatients() {
+            const patients = JSON.parse(localStorage.getItem('patients') || '[]');
+            const patientsGrid = document.getElementById('patientsGrid');
+            if (patientsGrid) {
+                patientsGrid.innerHTML = patients.map(patient => `
+                    <div class="patient-card" data-id="${patient.id}">
+                        <div class="patient-info">
+                            <img src="https://via.placeholder.com/60" alt="${patient.name}">
+                            <div class="patient-details">
+                                <h3>${patient.name}</h3>
+                                <p>Email: ${patient.email}</p>
+                                <p>Teléfono: ${patient.phone}</p>
+                                <span class="status active">Activo</span>
+                            </div>
+                        </div>
+                        <div class="patient-actions">
+                            <button class="btn-icon view-patient" title="Ver Paciente"><i class="fas fa-eye"></i></button>
+                            <button class="btn-icon edit-patient" title="Editar Paciente"><i class="fas fa-edit"></i></button>
+                            <button class="btn-icon add-appointment" title="Agendar Cita"><i class="fas fa-calendar-plus"></i></button>
+                        </div>
+                    </div>
+                `).join('');
+
+                patientsGrid.querySelectorAll('.add-appointment').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const patientCard = e.target.closest('.patient-card');
+                        const patientId = patientCard.dataset.id;
+                        // Here you would typically redirect to a page to add an appointment for this patient
+                        console.log(`Agendar cita para paciente con ID: ${patientId}`);
+                         window.location.href = `agregar-cita.html?patientId=${patientId}`;
+                    });
+                });
+
+                // Add event listeners for view and edit buttons as needed
+            }
+        }
+    </script>
+</body>
+</html> 
