@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajustes - PsyCare</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script type="module" src="../../js/firebase-config.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Menú Lateral -->
+        <nav class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>PsyCare</h1>
+                    <p>Panel de Psicólogo</p>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="/pages/psychologist/dashboard.html"><i class="fas fa-home"></i> Inicio</a></li>
+                <li><a href="/pages/psychologist/patients.html"><i class="fas fa-users"></i> Pacientes</a></li>
+                <li><a href="/pages/psychologist/appointments.html"><i class="fas fa-calendar"></i> Citas</a></li>
+                <li><a href="/pages/psychologist/evaluations.html"><i class="fas fa-clipboard-list"></i> Evaluaciones</a></li>
+                <li class="active"><a href="/pages/psychologist/settings.html"><i class="fas fa-cog"></i> Ajustes</a></li>
+                <li><a href="/pages/log/index.html" id="logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Buscar en ajustes...">
+                </div>
+                <div class="user-profile">
+                    <img src="https://via.placeholder.com/40" alt="Perfil">
+                </div>
+            </header>
+
+            <!-- Ajustes -->
+            <div class="settings-container">
+                <h2>Configuración del Sistema</h2>
+
+                <!-- Perfil de Usuario -->
+                <section class="settings-section">
+                    <h3><i class="fas fa-user-circle"></i> Perfil de Usuario</h3>
+                    <div class="settings-form">
+                        <div class="form-group">
+                            <label>Especialidad</label>
+                            <input type="text" id="specialty" value="Psicología Clínica">
+                        </div>
+                        <button class="btn-primary" id="saveProfile">Guardar Cambios</button>
+                        <div id="profileMessage" class="message"></div>
+                    </div>
+                </section>
+
+                <!-- Preferencias -->
+                <section class="settings-section">
+                    <h3><i class="fas fa-sliders-h"></i> Preferencias</h3>
+                    <div class="settings-form">
+                        <div class="form-group">
+                            <label>Notificaciones por Email</label>
+                            <label class="switch">
+                                <input type="checkbox" id="emailNotifications" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>Recordatorios de Citas</label>
+                            <label class="switch">
+                                <input type="checkbox" id="appointmentReminders" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>Zona Horaria</label>
+                            <select id="timezone">
+                                <option value="UTC-5">UTC-5 (América Central)</option>
+                                <option value="UTC-6">UTC-6 (América del Norte)</option>
+                                <option value="UTC+0">UTC+0 (GMT)</option>
+                            </select>
+                        </div>
+                        <button class="btn-primary" id="savePreferences">Guardar Preferencias</button>
+                        <div id="preferencesMessage" class="message"></div>
+                    </div>
+                </section>
+
+                <!-- Seguridad -->
+                <section class="settings-section">
+                    <h3><i class="fas fa-shield-alt"></i> Seguridad</h3>
+                    <div class="settings-form">
+                        <div class="form-group">
+                            <label>Cambiar Contraseña</label>
+                            <input type="password" id="newPassword" placeholder="Nueva contraseña">
+                        </div>
+                        <div class="form-group">
+                            <label>Confirmar Contraseña</label>
+                            <input type="password" id="confirmPassword" placeholder="Confirmar contraseña">
+                        </div>
+                        <button class="btn-primary" id="updatePassword">Actualizar Contraseña</button>
+                        <div id="passwordMessage" class="message"></div>
+                    </div>
+                </section>
+
+                <!-- Privacidad -->
+                <section class="settings-section">
+                    <h3><i class="fas fa-lock"></i> Privacidad</h3>
+                    <div class="settings-form">
+                        <div class="form-group">
+                            <label>Compartir datos de uso anónimos</label>
+                            <label class="switch">
+                                <input type="checkbox" id="shareData">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>Mostrar estado en línea</label>
+                            <label class="switch">
+                                <input type="checkbox" id="showOnlineStatus" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <button class="btn-primary" id="savePrivacy">Guardar Configuración</button>
+                        <div id="privacyMessage" class="message"></div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/main.js"></script>
+    <script type="module">
+        import { auth, db } from '../../js/firebase-config.js';
+        import { 
+            doc, 
+            getDoc, 
+            updateDoc,
+            onSnapshot
+        } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+        import { 
+            updatePassword,
+            EmailAuthProvider,
+            reauthenticateWithCredential
+        } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+
+        // Función para cargar los datos del usuario
+        async function loadUserData() {
+            const user = auth.currentUser;
+            if (user) {
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    document.getElementById('specialty').value = userData.specialty || '';
+                    document.getElementById('emailNotifications').checked = userData.emailNotifications ?? true;
+                    document.getElementById('appointmentReminders').checked = userData.appointmentReminders ?? true;
+                    document.getElementById('timezone').value = userData.timezone || 'UTC-5';
+                    document.getElementById('shareData').checked = userData.shareData ?? false;
+                    document.getElementById('showOnlineStatus').checked = userData.showOnlineStatus ?? true;
+                }
+            }
+        }
+
+        // Función para actualizar el perfil
+        async function updateProfile() {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            const specialty = document.getElementById('specialty').value;
+
+            try {
+                await updateDoc(doc(db, "users", user.uid), {
+                    specialty
+                });
+                document.getElementById('profileMessage').textContent = 'Perfil actualizado correctamente';
+                document.getElementById('profileMessage').className = 'message success';
+            } catch (error) {
+                document.getElementById('profileMessage').textContent = 'Error al actualizar el perfil';
+                document.getElementById('profileMessage').className = 'message error';
+            }
+        }
+
+        // Función para actualizar las preferencias
+        async function updatePreferences() {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            const emailNotifications = document.getElementById('emailNotifications').checked;
+            const appointmentReminders = document.getElementById('appointmentReminders').checked;
+            const timezone = document.getElementById('timezone').value;
+
+            try {
+                await updateDoc(doc(db, "users", user.uid), {
+                    emailNotifications,
+                    appointmentReminders,
+                    timezone
+                });
+                document.getElementById('preferencesMessage').textContent = 'Preferencias actualizadas correctamente';
+                document.getElementById('preferencesMessage').className = 'message success';
+            } catch (error) {
+                document.getElementById('preferencesMessage').textContent = 'Error al actualizar las preferencias';
+                document.getElementById('preferencesMessage').className = 'message error';
+            }
+        }
+
+        // Función para actualizar la contraseña
+        async function updateUserPassword() {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (newPassword !== confirmPassword) {
+                document.getElementById('passwordMessage').textContent = 'Las contraseñas no coinciden';
+                document.getElementById('passwordMessage').className = 'message error';
+                return;
+            }
+
+            try {
+                await updatePassword(user, newPassword);
+                document.getElementById('passwordMessage').textContent = 'Contraseña actualizada correctamente';
+                document.getElementById('passwordMessage').className = 'message success';
+                document.getElementById('newPassword').value = '';
+                document.getElementById('confirmPassword').value = '';
+            } catch (error) {
+                document.getElementById('passwordMessage').textContent = 'Error al actualizar la contraseña';
+                document.getElementById('passwordMessage').className = 'message error';
+            }
+        }
+
+        // Función para actualizar la configuración de privacidad
+        async function updatePrivacySettings() {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            const shareData = document.getElementById('shareData').checked;
+            const showOnlineStatus = document.getElementById('showOnlineStatus').checked;
+
+            try {
+                await updateDoc(doc(db, "users", user.uid), {
+                    shareData,
+                    showOnlineStatus
+                });
+                document.getElementById('privacyMessage').textContent = 'Configuración de privacidad actualizada';
+                document.getElementById('privacyMessage').className = 'message success';
+            } catch (error) {
+                document.getElementById('privacyMessage').textContent = 'Error al actualizar la configuración';
+                document.getElementById('privacyMessage').className = 'message error';
+            }
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar si el usuario está autenticado
+            auth.onAuthStateChanged(async (user) => {
+                if (user) {
+                    await loadUserData();
+                } else {
+                    window.location.href = 'login.html';
+                }
+            });
+
+            // Event listeners para los botones
+            document.getElementById('saveProfile').addEventListener('click', updateProfile);
+            document.getElementById('savePreferences').addEventListener('click', updatePreferences);
+            document.getElementById('updatePassword').addEventListener('click', updateUserPassword);
+            document.getElementById('savePrivacy').addEventListener('click', updatePrivacySettings);
+        });
+    </script>
+</body>
+</html> 

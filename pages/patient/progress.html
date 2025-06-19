@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PsyCare - Mi Progreso</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Menú Lateral -->
+        <nav class="sidebar">
+            <div class="logo">
+                <div class="logo-image">
+                    <img src="../../assets/images/PsyCareLog.jpg" alt="PsyCare Logo">
+                </div>
+                <div class="logo-text">
+                    <h1>PsyCare</h1>
+                    <p>Panel de Paciente</p>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="/pages/patient/dashboard.html"><i class="fas fa-home"></i> Inicio</a></li>
+                <li><a href="/pages/patient/appointments.html"><i class="fas fa-calendar"></i> Mis Citas</a></li>
+                <li><a href="/pages/patient/evaluations.html"><i class="fas fa-clipboard-list"></i> Mis Evaluaciones</a></li>
+                <li class="active"><a href="/pages/patient/progress.html"><i class="fas fa-chart-line"></i> Mi Progreso</a></li>
+                <li><a href="/pages/patient/resources.html"><i class="fas fa-book"></i> Recursos</a></li>
+                <li><a href="/pages/patient/diagnosis.html"><i class="fas fa-robot"></i> Diagnóstico</a></li>
+                <li><a href="/pages/patient/settings.html"><i class="fas fa-cog"></i> Ajustes</a></li>
+                <li><a href="/pages/log/index.html" id="logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Buscar...">
+                </div>
+                <div class="user-profile">
+                    <span>María González</span>
+                    <img src="../../assets/images/avatar.jpg" alt="Perfil" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid #e0e0e0;">
+                </div>
+            </header>
+
+            <div class="progress-container">
+                <div class="section-header">
+                    <h2>Mi Progreso</h2>
+                </div>
+
+                <div class="panel">
+                    <h3>Registro de Estado de Ánimo</h3>
+                    <div class="mood-chart-container">
+                        <canvas id="moodChart"></canvas>
+                    </div>
+                    <div class="mood-list" id="moodHistoryList">
+                         <!-- Mood entries will be loaded here -->
+                         <p class="no-appointments">Cargando historial de estado de ánimo...</p>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h3>Evaluaciones Recientes</h3>
+                     <div class="recent-evaluations">
+                        <div class="evaluation-item">
+                            <div class="evaluation-info">
+                                <h4>Test de Ansiedad</h4>
+                                <p>Completado: 2023-10-25</p>
+                                <p>Resultado: <span class="result moderate">Moderado</span></p>
+                            </div>
+                             <button class="btn-secondary">Ver Detalles</button>
+                        </div>
+                         <div class="evaluation-item">
+                            <div class="evaluation-info">
+                                <h4>Inventario de Depresión</h4>
+                                <p>Completado: 2023-10-20</p>
+                                <p>Resultado: <span class="result low">Bajo</span></p>
+                            </div>
+                            <button class="btn-secondary">Ver Detalles</button>
+                        </div>
+                         <!-- More recent evaluations -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </button>
+    <script src="../../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadMoodHistory();
+            renderMoodChart(); // Placeholder, actual data loading needed
+        });
+
+         function loadMoodHistory() {
+             // Load mood history from localStorage or fetch from backend
+             const moodEntries = JSON.parse(localStorage.getItem('moodEntries') || '[]');
+             const moodHistoryList = document.getElementById('moodHistoryList');
+
+             if (moodHistoryList) {
+                 if (moodEntries.length > 0) {
+                      moodHistoryList.innerHTML = moodEntries
+                         .sort((a, b) => new Date(b.date) - new Date(a.date))
+                         .map(entry => `
+                             <div class="mood-item">
+                                 <div class="mood-icon"><i class="${getMoodIcon(entry.mood)}"></i></div>
+                                 <div class="mood-info">
+                                     <div class="mood-status">${getMoodText(entry.mood)}</div>
+                                     <div class="mood-date">${new Date(entry.date).toLocaleString()}</div>
+                                 </div>
+                             </div>
+                         `).join('');
+                 } else {
+                     moodHistoryList.innerHTML = '<p class="no-appointments">No hay registros de estado de ánimo.</p>';
+                 }
+             }
+         }
+
+        function getMoodIcon(moodValue) {
+            switch(moodValue) {
+                case 1: return 'fas fa-face-sad-tear';
+                case 2: return 'fas fa-face-frown';
+                case 3: return 'fas fa-face-meh';
+                case 4: return 'fas fa-face-smile';
+                case 5: return 'fas fa-face-grin-stars';
+                default: return 'fas fa-question';
+            }
+        }
+
+         function getMoodText(moodValue) {
+             switch(moodValue) {
+                 case 1: return 'Muy mal';
+                 case 2: return 'Mal';
+                 case 3: return 'Regular';
+                 case 4: return 'Bien';
+                 case 5: return 'Excelente';
+                 default: return 'Desconocido';
+             }
+         }
+
+        function renderMoodChart() {
+            const ctx = document.getElementById('moodChart').getContext('2d');
+            // Example data, replace with actual mood history data
+            const labels = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+            const data = [3, 4, 2, 5, 4, 3, 5]; // Example mood values
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Estado de Ánimo Diario',
+                        data: data,
+                        borderColor: '#87CEEB',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 5,
+                            ticks: {
+                                callback: function(value, index, values) {
+                                     // Optional: label Y axis ticks with mood text
+                                     return getMoodText(value);
+                                }
+                            }
+                        }
+                    },
+                     plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html> 

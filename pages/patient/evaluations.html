@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PsyCare - Mis Evaluaciones</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Menú Lateral -->
+        <nav class="sidebar">
+            <div class="logo">
+                <div class="logo-image">
+                    <img src="../../assets/images/PsyCareLog.jpg" alt="PsyCare Logo">
+                </div>
+                <div class="logo-text">
+                    <h1>PsyCare</h1>
+                    <p>Panel de Paciente</p>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="/pages/patient/dashboard.html"><i class="fas fa-home"></i> Inicio</a></li>
+                <li><a href="/pages/patient/appointments.html"><i class="fas fa-calendar"></i> Mis Citas</a></li>
+                <li class="active"><a href="/pages/patient/evaluations.html"><i class="fas fa-clipboard-list"></i> Mis Evaluaciones</a></li>
+                <li><a href="/pages/patient/progress.html"><i class="fas fa-chart-line"></i> Mi Progreso</a></li>
+                <li><a href="/pages/patient/resources.html"><i class="fas fa-book"></i> Recursos</a></li>
+                <li><a href="/pages/patient/diagnosis.html"><i class="fas fa-robot"></i> Diagnóstico</a></li>
+                <li><a href="/pages/patient/settings.html"><i class="fas fa-cog"></i> Ajustes</a></li>
+                <li><a href="/pages/log/index.html" id="logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Buscar evaluación...">
+                </div>
+                <div class="user-profile">
+                    <span>María González</span>
+                    <img src="../../assets/images/avatar.jpg" alt="Perfil" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid #e0e0e0;">
+                </div>
+            </header>
+
+            <div class="evaluations-container">
+                <div class="section-header">
+                    <h2>Mis Evaluaciones</h2>
+                    <!-- Patient might not initiate new evaluations directly -->
+                </div>
+
+                <div class="history-table">
+                    <h3>Historial de Evaluaciones</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Tipo de Evaluación</th>
+                                <th>Resultado Clave</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2023-10-25</td>
+                                <td>Test de Ansiedad</td>
+                                <td><span class="result moderate">Moderado</span></td>
+                                <td><button class="btn-secondary">Ver Detalles</button></td>
+                            </tr>
+                            <tr>
+                                <td>2023-10-20</td>
+                                <td>Inventario de Depresión</td>
+                                <td><span class="result low">Bajo</span></td>
+                                <td><button class="btn-secondary">Ver Detalles</button></td>
+                            </tr>
+                            <!-- More rows can be added here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+    <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </button>
+    <script src="../../js/main.js"></script>
+</body>
+</html> 

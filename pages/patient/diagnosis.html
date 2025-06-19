@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PsyCare - Diagnóstico</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .chatbot-panel { 
+            background: #fff; 
+            border-radius: 20px; 
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1); 
+            max-width: 800px; 
+            margin: 40px auto; 
+            padding: 30px;
+            height: calc(100vh - 100px);
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-header { 
+            text-align: center; 
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        .chat-header h2 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+        .chat-header p {
+            color: #7f8c8d;
+            font-size: 16px;
+        }
+        #chatMessages { 
+            flex: 1;
+            min-height: 300px;
+            max-height: calc(100vh - 250px);
+            overflow-y: auto; 
+            background: #f8f9fa; 
+            border-radius: 15px; 
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .chat-message {
+            max-width: 80%;
+            padding: 12px 18px;
+            border-radius: 15px;
+            position: relative;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .chat-message.bot { 
+            background: #e3f2fd; 
+            color: #1565c0;
+            border-bottom-left-radius: 5px;
+            align-self: flex-start;
+        }
+        .chat-message.user { 
+            background: #1565c0; 
+            color: #1e1e1e;
+            border-bottom-right-radius: 5px;
+            align-self: flex-end;
+            font-weight: 500;
+        }
+        .chat-input-container { 
+            display: flex; 
+            gap: 10px;
+            background: #fff;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        #chatInput { 
+            flex: 1; 
+            padding: 12px 20px;
+            border-radius: 25px;
+            border: 2px solid #e0e0e0;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        #chatInput:focus {
+            outline: none;
+            border-color: #1565c0;
+            box-shadow: 0 0 0 3px rgba(21, 101, 192, 0.1);
+        }
+        #sendButton { 
+            padding: 12px 25px;
+            border-radius: 25px;
+            background: #1565c0;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        #sendButton:hover { 
+            background: #0d47a1;
+            transform: translateY(-1px);
+        }
+        #sendButton:active {
+            transform: translateY(1px);
+        }
+        .message-content {
+            line-height: 1.5;
+        }
+        .message-content p {
+            margin: 0;
+            color: inherit;
+        }
+        /* Estilo para el scrollbar */
+        #chatMessages::-webkit-scrollbar {
+            width: 8px;
+        }
+        #chatMessages::-webkit-scrollbar-track {
+            background: #0c0c0c;
+            border-radius: 4px;
+        }
+        #chatMessages::-webkit-scrollbar-thumb {
+            background: #1565c0;
+            border-radius: 4px;
+        }
+        #chatMessages::-webkit-scrollbar-thumb:hover {
+            background: #0d47a1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Menú Lateral -->
+        <nav class="sidebar">
+            <div class="logo">
+                <div class="logo-image">
+                    <img src="../../assets/images/PsyCareLog.jpg" alt="PsyCare Logo">
+                </div>
+                <div class="logo-text">
+                    <h1>PsyCare</h1>
+                    <p>Panel de Paciente</p>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="/pages/patient/dashboard.html"><i class="fas fa-home"></i> Inicio</a></li>
+                <li><a href="/pages/patient/appointments.html"><i class="fas fa-calendar"></i> Mis Citas</a></li>
+                <li><a href="/pages/patient/evaluations.html"><i class="fas fa-clipboard-list"></i> Mis Evaluaciones</a></li>
+                <li><a href="/pages/patient/progress.html"><i class="fas fa-chart-line"></i> Mi Progreso</a></li>
+                <li><a href="/pages/patient/resources.html"><i class="fas fa-book"></i> Recursos</a></li>
+                <li class="active"><a href="/pages/patient/diagnosis.html"><i class="fas fa-robot"></i> Diagnóstico</a></li>
+                <li><a href="/pages/patient/settings.html"><i class="fas fa-cog"></i> Ajustes</a></li>
+                <li><a href="/pages/log/index.html" id="logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <div class="chatbot-panel">
+                <div class="chat-header">
+                    <h2>Diagnóstico Temprano</h2>
+                    <p>Chatea con nuestro asistente IA para una evaluación inicial.</p>
+                </div>
+                <div class="user-profile">
+                    <span>María González</span>
+                    <img src="../../assets/images/avatar.jpg" alt="Perfil" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid #e0e0e0;">
+                </div>
+                <div id="chatMessages"></div>
+                <div class="chat-input-container">
+                    <input type="text" id="chatInput" placeholder="Escribe tu mensaje aquí...">
+                    <button id="sendButton">
+                        <i class="fas fa-paper-plane"></i>
+                        Enviar
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/main.js"></script>
+    <script src="../../js/chatbot.js"></script>
+</body>
+</html>

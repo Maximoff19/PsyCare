@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PsyCare - Iniciar Sesión</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(120deg, #e3f0ff 0%, #f8faff 100%);
+            font-family: 'Poppins', sans-serif;
+        }
+        .login-container {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(21,101,192,0.10);
+            padding: 40px 32px 32px 32px;
+            max-width: 370px;
+            width: 100%;
+            text-align: center;
+        }
+        .login-container h1 {
+            color: #1565c0;
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+        .login-container p {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+        .role-select {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        .role-btn {
+            flex: 1;
+            padding: 18px 0;
+            border-radius: 12px;
+            border: 2px solid #e0e0e0;
+            background: #f8faff;
+            color: #1565c0;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            outline: none;
+        }
+        .role-btn.selected, .role-btn:focus {
+            background: #1565c0;
+            color: #fff;
+            border-color: #1565c0;
+            box-shadow: 0 2px 8px rgba(21,101,192,0.08);
+        }
+        .login-btn {
+            width: 100%;
+            padding: 15px 0;
+            border-radius: 10px;
+            background: #1565c0;
+            color: #fff;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+        .login-btn:hover {
+            background: #0d47a1;
+        }
+        .login-logo {
+            width: 70px;
+            margin-bottom: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <img src="../../assets/images/PsyCareLog.jpg" alt="Logo PsyCare" class="login-logo">
+        <h1>PsyCare</h1>
+        <p>Selecciona tu rol para ingresar</p>
+        <form autocomplete="off" onsubmit="return false;">
+            <div style="margin-bottom: 18px; text-align:left;">
+                <label for="loginEmail" style="font-weight:500;color:#1565c0;display:block;margin-bottom:5px;">Correo electrónico</label>
+                <input type="email" id="loginEmail" class="login-input" placeholder="correo@ejemplo.com" style="width:100%;padding:12px 14px;border-radius:8px;border:1.5px solid #e0e0e0;font-size:1rem;outline:none;box-sizing:border-box;">
+            </div>
+            <div style="margin-bottom: 22px; text-align:left;">
+                <label for="loginPassword" style="font-weight:500;color:#1565c0;display:block;margin-bottom:5px;">Contraseña</label>
+                <input type="password" id="loginPassword" class="login-input" placeholder="••••••••" style="width:100%;padding:12px 14px;border-radius:8px;border:1.5px solid #e0e0e0;font-size:1rem;outline:none;box-sizing:border-box;">
+            </div>
+            <div class="role-select">
+                <button type="button" class="role-btn selected" id="btnPaciente"><i class="fas fa-user"></i> Paciente</button>
+                <button type="button" class="role-btn" id="btnPsicologo"><i class="fas fa-brain"></i> Psicólogo</button>
+            </div>
+            <button type="button" class="login-btn" id="loginBtn">Iniciar sesión</button>
+        </form>
+    </div>
+    <script>
+        let selectedRole = 'patient';
+        const btnPaciente = document.getElementById('btnPaciente');
+        const btnPsicologo = document.getElementById('btnPsicologo');
+        const loginBtn = document.getElementById('loginBtn');
+
+        btnPaciente.addEventListener('click', function() {
+            selectedRole = 'patient';
+            btnPaciente.classList.add('selected');
+            btnPsicologo.classList.remove('selected');
+        });
+        btnPsicologo.addEventListener('click', function() {
+            selectedRole = 'psychologist';
+            btnPsicologo.classList.add('selected');
+            btnPaciente.classList.remove('selected');
+        });
+        loginBtn.addEventListener('click', function() {
+            if(selectedRole === 'psychologist') {
+                window.location.href = '/pages/psychologist/dashboard.html';
+            } else {
+                window.location.href = '/pages/patient/dashboard.html';
+            }
+        });
+    </script>
+</body>
+</html>
